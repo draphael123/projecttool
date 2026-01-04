@@ -72,6 +72,8 @@ export const OutputOptionsSchema = z.object({
 });
 
 export const ReportConfigSchema = z.object({
+  instructions: z.string().optional(),
+  quickPrompt: z.string().optional(),
   columnMappings: z.array(ColumnMappingSchema),
   transforms: z.array(TransformSchema),
   filters: z.array(FilterSchema),
@@ -81,4 +83,5 @@ export const ReportConfigSchema = z.object({
 });
 
 export type ReportConfig = z.infer<typeof ReportConfigSchema>;
+
 

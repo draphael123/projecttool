@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Upload, X, Download, RefreshCw, Plus, Trash2 } from "lucide-react";
+import { Upload, X, Download, RefreshCw, Plus, Trash2, FileText, Layers, Sparkles, CheckCircle2, FileEdit, Wand2, Info, HelpCircle } from "lucide-react";
 import { parseCSV, autoMapColumns, downloadCSV } from "@/lib/csv-utils";
 import { processData } from "@/lib/processor";
 import type { ParsedCSV, ColumnMapping } from "@/lib/types";
@@ -24,6 +25,8 @@ export default function BuilderPage() {
   const [processedData, setProcessedData] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [config, setConfig] = useState<ReportConfig>({
+    instructions: "",
+    quickPrompt: "",
     columnMappings: [],
     transforms: [],
     filters: [],
@@ -112,54 +115,163 @@ export default function BuilderPage() {
   );
 
   return (
-    <div className="container mx-auto py-8 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">CSV Report Builder</h1>
-        <Button onClick={handleGenerate} disabled={!templateFile || inputFiles.length === 0}>
-          <RefreshCw className="mr-2 h-4 w-4" />
-          Generate Report
-        </Button>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 via-blue-50 to-cyan-50">
+      <div className="container mx-auto py-8 space-y-6">
+        {/* Enhanced Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div className="space-y-2">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+              CSV Report Builder
+            </h1>
+            <p className="text-muted-foreground">Combine and transform your CSV files with ease</p>
+          </div>
+          <Button 
+            onClick={handleGenerate} 
+            disabled={!templateFile || inputFiles.length === 0}
+            className="bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 hover:from-purple-700 hover:via-pink-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Generate Report
+          </Button>
+        </div>
+
+      {/* How to Use Guide */}
+      <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 shadow-lg mb-6">
+        <CardHeader className="bg-gradient-to-r from-blue-100 via-cyan-100 to-blue-100 rounded-t-lg border-b-2 border-blue-300">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+              <HelpCircle className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <CardTitle className="text-xl font-bold text-blue-900">How to Use This Tool</CardTitle>
+              <CardDescription className="text-blue-800 mt-1">
+                Follow these steps to combine your CSV files and create a unified report
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                  1
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-base text-purple-900 mb-1">Upload Template CSV</h3>
+                  <p className="text-sm text-purple-700 leading-relaxed">
+                    Upload a CSV file that defines your desired output structure. This template file should contain the column headers you want in your final report. The tool will use this as a guide for mapping data from your input files.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                  2
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-base text-blue-900 mb-1">Upload Input CSV Files</h3>
+                  <p className="text-sm text-blue-700 leading-relaxed">
+                    Upload one or more CSV files that contain the data you want to combine. You can upload multiple files at once. The tool will automatically attempt to map columns from these files to your template.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                  3
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-base text-pink-900 mb-1">Provide Instructions</h3>
+                  <p className="text-sm text-pink-700 leading-relaxed">
+                    Use the <strong>Quick Prompt</strong> for simple instructions or the <strong>Detailed Instructions</strong> field for comprehensive requirements. Describe what you want: column mappings, transformations, filters, deduplication rules, etc.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                  4
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-base text-green-900 mb-1">Configure & Generate</h3>
+                  <p className="text-sm text-green-700 leading-relaxed">
+                    Use the configuration tabs to fine-tune column mappings, apply transforms, add filters, set up deduplication, and create derived fields. Click <strong>"Generate Report"</strong> to process your data, preview the results, and download the final CSV.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 pt-6 border-t border-blue-200">
+            <div className="bg-blue-100 border border-blue-300 rounded-lg p-4">
+              <div className="flex gap-3">
+                <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-blue-900 mb-1">💡 Tip: All processing happens in your browser</p>
+                  <p className="text-xs text-blue-800">
+                    Your data never leaves your device. Everything is processed locally for maximum privacy and security. The tool supports large datasets and will show you a preview of the first 200 rows before you download.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Template Upload Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Template CSV</CardTitle>
-            <CardDescription>Upload a CSV file that defines the output schema</CardDescription>
+        <Card className="card-hover border-2 shadow-lg hover:shadow-xl transition-all duration-300">
+          <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-t-lg">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <CardTitle className="text-xl">Template CSV</CardTitle>
+                <CardDescription>Upload a CSV file that defines the output schema</CardDescription>
+              </div>
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             {templateFile ? (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">{templateFile.filename}</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex-1">
+                    <div className="font-semibold text-green-900 flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4" />
+                      {templateFile.filename}
+                    </div>
+                    <div className="text-sm text-green-700 mt-1">
+                      {templateFile.rowCount} rows, {templateFile.headers.length} columns
+                    </div>
+                  </div>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setTemplateFile(null)}
+                    className="hover:bg-red-100 hover:text-red-600"
                   >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  {templateFile.rowCount} rows, {templateFile.headers.length} columns
-                </div>
                 {templateFile.error && (
-                  <div className="text-sm text-destructive">{templateFile.error}</div>
+                  <div className="text-sm text-destructive bg-red-50 p-2 rounded border border-red-200">{templateFile.error}</div>
                 )}
-                <div className="flex flex-wrap gap-1 mt-2">
+                <div className="flex flex-wrap gap-2 mt-3">
                   {templateFile.headers.slice(0, 10).map((h) => (
-                    <Badge key={h} variant="outline">{h}</Badge>
+                    <Badge key={h} variant="outline" className="bg-blue-50 border-blue-200 text-blue-700">{h}</Badge>
                   ))}
                   {templateFile.headers.length > 10 && (
-                    <Badge variant="outline">+{templateFile.headers.length - 10} more</Badge>
+                    <Badge variant="outline" className="bg-purple-50 border-purple-200 text-purple-700">+{templateFile.headers.length - 10} more</Badge>
                   )}
                 </div>
               </div>
             ) : (
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-accent">
-                <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">Click to upload template</span>
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-purple-300 rounded-xl cursor-pointer bg-gradient-to-br from-purple-50 to-blue-50 hover:from-purple-100 hover:to-blue-100 transition-all duration-300 group">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                  <Upload className="w-8 h-8 text-white" />
+                </div>
+                <span className="text-sm font-medium text-purple-700 group-hover:text-purple-900">Click to upload template</span>
+                <span className="text-xs text-muted-foreground mt-1">CSV file</span>
                 <input
                   type="file"
                   className="hidden"
@@ -175,15 +287,25 @@ export default function BuilderPage() {
         </Card>
 
         {/* Input Files Upload Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Input CSV Files</CardTitle>
-            <CardDescription>Upload one or more CSV files to combine</CardDescription>
+        <Card className="card-hover border-2 shadow-lg hover:shadow-xl transition-all duration-300">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-t-lg">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                <Layers className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <CardTitle className="text-xl">Input CSV Files</CardTitle>
+                <CardDescription>Upload one or more CSV files to combine</CardDescription>
+              </div>
+            </div>
           </CardHeader>
-          <CardContent>
-            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-accent mb-4">
-              <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Click to upload files</span>
+          <CardContent className="pt-6">
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-blue-300 rounded-xl cursor-pointer bg-gradient-to-br from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-all duration-300 mb-4 group">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                <Upload className="w-8 h-8 text-white" />
+              </div>
+              <span className="text-sm font-medium text-blue-700 group-hover:text-blue-900">Click to upload files</span>
+              <span className="text-xs text-muted-foreground mt-1">Multiple CSV files</span>
               <input
                 type="file"
                 className="hidden"
@@ -194,20 +316,21 @@ export default function BuilderPage() {
             </label>
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {inputFiles.map((file, idx) => (
-                <div key={idx} className="flex items-center justify-between p-2 border rounded">
+                <div key={idx} className="flex items-center justify-between p-3 border-2 border-blue-200 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors">
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">{file.filename}</div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="font-medium truncate text-blue-900">{file.filename}</div>
+                    <div className="text-sm text-blue-700">
                       {file.rowCount} rows, {file.headers.length} columns
                     </div>
                     {file.error && (
-                      <div className="text-xs text-destructive">{file.error}</div>
+                      <div className="text-xs text-destructive bg-red-50 p-1 rounded mt-1 border border-red-200">{file.error}</div>
                     )}
                   </div>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setInputFiles((prev) => prev.filter((_, i) => i !== idx))}
+                    className="hover:bg-red-100 hover:text-red-600"
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -218,21 +341,137 @@ export default function BuilderPage() {
         </Card>
       </div>
 
+      {/* Quick Prompt Card - Simple Text Option */}
+      <Card className="card-hover border-2 shadow-xl border-purple-300 bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 mb-6">
+        <CardHeader className="bg-gradient-to-r from-purple-200 via-pink-200 to-purple-200 rounded-t-lg border-b-2 border-purple-300">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Wand2 className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1">
+              <CardTitle className="text-xl font-bold text-purple-900">
+                Quick Prompt
+              </CardTitle>
+              <CardDescription className="text-purple-800 font-medium mt-1">
+                🚀 Describe what you want in simple terms (alternative to detailed instructions below)
+              </CardDescription>
+            </div>
+            <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 px-3 py-1 text-sm font-semibold">
+              Quick
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="space-y-3">
+            <Textarea
+              id="quickPrompt"
+              placeholder="Example: &quot;Combine all my CSV files, remove duplicates by email, filter out inactive customers, and format dates as YYYY-MM-DD&quot;"
+              value={config.quickPrompt || ""}
+              onChange={(e) => {
+                setConfig((prev) => ({
+                  ...prev,
+                  quickPrompt: e.target.value,
+                }));
+              }}
+              className="min-h-[100px] resize-y bg-white border-2 border-purple-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-400 text-base leading-relaxed placeholder:text-purple-400"
+            />
+            {config.quickPrompt && config.quickPrompt.trim() && (
+              <div className="bg-purple-100 border border-purple-300 rounded-lg p-3">
+                <p className="text-xs text-purple-800 font-medium">
+                  💡 This prompt will guide your report generation alongside the detailed instructions below.
+                </p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Instructions Card - The Foundation */}
+      <Card className="card-hover border-2 shadow-xl border-amber-300 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+        <CardHeader className="bg-gradient-to-r from-amber-200 via-orange-200 to-amber-200 rounded-t-lg border-b-2 border-amber-300">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+              <FileEdit className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1">
+              <CardTitle className="text-2xl font-bold text-amber-900">
+                Report Instructions
+              </CardTitle>
+              <CardDescription className="text-amber-800 font-medium mt-1">
+                ⭐ Provide instructions that will guide the output configuration. These instructions form the basis for how your report will be generated.
+              </CardDescription>
+            </div>
+            <Badge className="bg-gradient-to-r from-amber-600 to-orange-600 text-white border-0 px-3 py-1 text-sm font-semibold">
+              Foundation
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="instructions" className="text-base font-semibold text-amber-900">
+                Your Instructions
+              </Label>
+              {config.instructions && config.instructions.trim() && (
+                <Badge variant="outline" className="bg-green-50 border-green-300 text-green-700">
+                  ✓ Instructions provided
+                </Badge>
+              )}
+            </div>
+            <Textarea
+              id="instructions"
+              placeholder="Example instructions:&#10;&#10;• Combine all input CSV files into a single report&#10;• Map 'Customer Name' column to 'Name' in the template&#10;• Filter out rows where Status equals 'Inactive'&#10;• Remove duplicates based on Email address (keep first occurrence)&#10;• Convert all date columns to YYYY-MM-DD format&#10;• Trim whitespace from all text columns&#10;• Create a new field 'Full Name' by concatenating First Name and Last Name&#10;&#10;Be as specific as possible about column mappings, transformations, filters, and output requirements."
+              value={config.instructions || ""}
+              onChange={(e) => {
+                setConfig((prev) => ({
+                  ...prev,
+                  instructions: e.target.value,
+                }));
+              }}
+              className="min-h-[180px] resize-y bg-white border-2 border-amber-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-400 text-base leading-relaxed placeholder:text-amber-400"
+            />
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-900 font-medium mb-2">
+                💡 How Instructions Work:
+              </p>
+              <ul className="text-xs text-blue-800 space-y-1 list-disc list-inside">
+                <li>Your instructions guide the column mapping, transformations, filters, and deduplication rules</li>
+                <li>Be specific about column names, data formats, and output requirements</li>
+                <li>Instructions are used as reference when configuring the report settings below</li>
+                <li>The final output will be based on both your instructions and the configuration settings</li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Configuration Tabs */}
       {templateFile && inputFiles.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Report Configuration</CardTitle>
+        <Card className="card-hover border-2 shadow-lg border-purple-200">
+          <CardHeader className="bg-gradient-to-r from-purple-100 via-pink-100 via-blue-100 to-purple-100 rounded-t-lg">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1">
+                <CardTitle className="text-xl">Report Configuration</CardTitle>
+                {config.instructions && config.instructions.trim() && (
+                  <CardDescription className="text-xs mt-1 text-purple-700">
+                    Configure settings below based on your instructions above
+                  </CardDescription>
+                )}
+              </div>
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             <Tabs defaultValue="mapping" className="w-full">
-              <TabsList className="grid w-full grid-cols-6">
-                <TabsTrigger value="mapping">Mapping</TabsTrigger>
-                <TabsTrigger value="transforms">Transforms</TabsTrigger>
-                <TabsTrigger value="filters">Filters</TabsTrigger>
-                <TabsTrigger value="dedupe">Dedupe</TabsTrigger>
-                <TabsTrigger value="derived">Derived</TabsTrigger>
-                <TabsTrigger value="output">Output</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-6 bg-gradient-to-r from-purple-100 via-pink-100 to-blue-100 p-1 rounded-lg border border-purple-200">
+                <TabsTrigger value="mapping" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:via-pink-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg">Mapping</TabsTrigger>
+                <TabsTrigger value="transforms" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:via-pink-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg">Transforms</TabsTrigger>
+                <TabsTrigger value="filters" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:via-pink-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg">Filters</TabsTrigger>
+                <TabsTrigger value="dedupe" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:via-pink-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg">Dedupe</TabsTrigger>
+                <TabsTrigger value="derived" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:via-pink-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg">Derived</TabsTrigger>
+                <TabsTrigger value="output" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:via-pink-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg">Output</TabsTrigger>
               </TabsList>
 
               {/* Column Mapping Tab */}
@@ -318,6 +557,7 @@ export default function BuilderPage() {
                         ],
                       }));
                     }}
+                    className="border-purple-300 text-purple-700 hover:bg-purple-50 hover:border-purple-400"
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Add Mapping
@@ -422,6 +662,7 @@ export default function BuilderPage() {
                         ],
                       }));
                     }}
+                    className="border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400"
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Add Transform
@@ -510,6 +751,7 @@ export default function BuilderPage() {
                         ],
                       }));
                     }}
+                    className="border-pink-300 text-pink-700 hover:bg-pink-50 hover:border-pink-400"
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Add Filter
@@ -708,6 +950,7 @@ export default function BuilderPage() {
                         ],
                       }));
                     }}
+                    className="border-indigo-300 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-400"
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Add Derived Field
@@ -749,16 +992,53 @@ export default function BuilderPage() {
         </Card>
       )}
 
+      {/* Instructions Summary - shown when instructions exist and data is processed */}
+      {processedData.length > 0 && config.instructions && config.instructions.trim() && (
+        <Card className="border-2 border-amber-300 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 shadow-lg">
+          <CardHeader className="bg-gradient-to-r from-amber-100 to-orange-100 rounded-t-lg border-b-2 border-amber-300">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg flex items-center justify-center">
+                <FileEdit className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1">
+                <CardTitle className="text-xl text-amber-900 font-bold">Applied Instructions</CardTitle>
+                <CardDescription className="text-amber-800 mt-1">
+                  These instructions formed the basis for generating the report below
+                </CardDescription>
+              </div>
+              <Badge className="bg-gradient-to-r from-amber-600 to-orange-600 text-white border-0">
+                Active
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="bg-white/80 backdrop-blur-sm border-2 border-amber-200 rounded-lg p-4">
+              <p className="text-sm text-amber-900 whitespace-pre-wrap leading-relaxed font-medium">
+                {config.instructions}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Preview Table */}
       {processedData.length > 0 && (
-        <Card>
-          <CardHeader>
+        <Card className="card-hover border-2 shadow-lg">
+          <CardHeader className="bg-gradient-to-r from-green-100 via-emerald-100 to-teal-100 rounded-t-lg">
             <div className="flex justify-between items-center">
-              <div>
-                <CardTitle>Preview ({processedData.length} rows)</CardTitle>
-                <CardDescription>Showing first 200 rows</CardDescription>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 rounded-lg flex items-center justify-center shadow-lg">
+                  <FileText className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Preview ({processedData.length} rows)</CardTitle>
+                  <CardDescription>Showing first 200 rows</CardDescription>
+                </div>
               </div>
-              <Button onClick={handleDownload}>
+              <Button 
+                onClick={handleDownload}
+                className="bg-gradient-to-r from-green-600 via-emerald-500 to-teal-600 hover:from-green-700 hover:via-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              >
                 <Download className="mr-2 h-4 w-4" />
                 Download CSV
               </Button>
@@ -825,6 +1105,7 @@ export default function BuilderPage() {
           </CardContent>
         </Card>
       )}
+      </div>
     </div>
   );
 }
