@@ -14,6 +14,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Upload, X, Download, RefreshCw, Plus, Trash2, FileText, Layers, Sparkles, CheckCircle2, FileEdit, Wand2, Info, HelpCircle } from "lucide-react";
 import { parseCSV, autoMapColumns, downloadCSV } from "@/lib/csv-utils";
 import { processData } from "@/lib/processor";
+import { parseInstructions, mergeInstructionsWithConfig } from "@/lib/instruction-parser";
 import type { ParsedCSV, ColumnMapping } from "@/lib/types";
 import type { ReportConfig } from "@/lib/schemas";
 
@@ -84,7 +85,31 @@ export default function BuilderPage() {
     if (!templateFile || inputFiles.length === 0) return;
     
     try {
-      const processed = processData(templateFile.headers, inputFiles, config);
+      // Parse instructions and merge with existing config
+      const allSourceHeaders = new Set<string>();
+      inputFiles.forEach((f) => f.headers.forEach((h) => allSourceHeaders.add(h)));
+      
+      const parsedInstructions = parseInstructions(
+        config.instructions || "",
+        config.quickPrompt || "",
+        templateFile.headers,
+        Array.from(allSourceHeaders)
+      );
+      
+      // Merge parsed instructions with existing config
+      // Existing config takes priority, but parsed instructions fill in gaps
+      const finalConfig = mergeInstructionsWithConfig(parsedInstructions, config);
+      
+      // If no column mappings exist, use parsed ones or auto-map
+      if (finalConfig.columnMappings.length === 0) {
+        const autoMappings = autoMapColumns(templateFile.headers, Array.from(allSourceHeaders));
+        finalConfig.columnMappings = Array.from(autoMappings.entries()).map(([template, source]) => ({
+          templateColumn: template,
+          sourceColumn: source,
+        }));
+      }
+      
+      const processed = processData(templateFile.headers, inputFiles, finalConfig);
       setProcessedData(processed);
       setCurrentPage(1);
     } catch (error) {
@@ -378,7 +403,7 @@ export default function BuilderPage() {
             {config.quickPrompt && config.quickPrompt.trim() && (
               <div className="bg-purple-100 border border-purple-300 rounded-lg p-3">
                 <p className="text-xs text-purple-800 font-medium">
-                  💡 This prompt will guide your report generation alongside the detailed instructions below.
+                  ✨ This prompt will be automatically parsed and applied when you generate the report. It will configure column mappings, filters, transforms, and other settings based on your instructions.
                 </p>
               </div>
             )}
