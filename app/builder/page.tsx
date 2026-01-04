@@ -13,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Upload, X, Download, RefreshCw, Plus, Trash2 } from "lucide-react";
 import { parseCSV, autoMapColumns, downloadCSV } from "@/lib/csv-utils";
 import { processData } from "@/lib/processor";
-import type { ParsedCSV } from "@/lib/types";
+import type { ParsedCSV, ColumnMapping } from "@/lib/types";
 import type { ReportConfig } from "@/lib/schemas";
 
 const ITEMS_PER_PAGE = 50;
