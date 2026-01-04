@@ -4,7 +4,7 @@ A production-quality Next.js 14 application for combining multiple CSV files int
 
 > **Latest Update:** All TypeScript errors resolved. Ready for deployment.
 
-**Status:** Latest build includes all TypeScript fixes.
+**Status:** Latest build includes all TypeScript fixes and @types/papaparse dependency.
 
 ## Features
 
