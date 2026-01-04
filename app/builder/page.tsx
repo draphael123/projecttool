@@ -140,12 +140,12 @@ export default function BuilderPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 via-blue-50 to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 via-sky-50 to-indigo-50">
       <div className="container mx-auto py-8 space-y-6">
         {/* Enhanced Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div className="space-y-2">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-indigo-600 bg-clip-text text-transparent">
               CSV Report Builder
             </h1>
             <p className="text-muted-foreground">Combine and transform your CSV files with ease</p>
@@ -153,7 +153,7 @@ export default function BuilderPage() {
           <Button 
             onClick={handleGenerate} 
             disabled={!templateFile || inputFiles.length === 0}
-            className="bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 hover:from-purple-700 hover:via-pink-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-600 hover:from-blue-700 hover:via-cyan-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
           >
             <RefreshCw className="mr-2 h-4 w-4" />
             Generate Report
@@ -180,7 +180,7 @@ export default function BuilderPage() {
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="flex gap-3 items-start">
-                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
                   1
                 </div>
                 <div className="flex-1">
@@ -204,12 +204,12 @@ export default function BuilderPage() {
             </div>
             <div className="space-y-4">
               <div className="flex gap-3 items-start">
-                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
                   3
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-base text-pink-900 mb-1">Provide Instructions</h3>
-                  <p className="text-sm text-pink-700 leading-relaxed">
+                  <h3 className="font-semibold text-base text-black mb-1">Provide Instructions</h3>
+                  <p className="text-sm text-black/80 leading-relaxed">
                     Use the <strong>Quick Prompt</strong> for simple instructions or the <strong>Detailed Instructions</strong> field for comprehensive requirements. Describe what you want: column mappings, transformations, filters, deduplication rules, etc.
                   </p>
                 </div>
@@ -220,7 +220,7 @@ export default function BuilderPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-base text-green-900 mb-1">Configure & Generate</h3>
-                  <p className="text-sm text-green-700 leading-relaxed">
+                  <p className="text-sm text-black/80 leading-relaxed">
                     Use the configuration tabs to fine-tune column mappings, apply transforms, add filters, set up deduplication, and create derived fields. Click <strong>"Generate Report"</strong> to process your data, preview the results, and download the final CSV.
                   </p>
                 </div>
@@ -249,9 +249,9 @@ export default function BuilderPage() {
         <div className="grid gap-6 md:grid-cols-2">
         {/* Template Upload Card */}
         <Card className="card-hover border-2 shadow-lg hover:shadow-xl transition-all duration-300">
-          <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-t-lg">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-t-lg">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-cyan-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -291,16 +291,16 @@ export default function BuilderPage() {
                     <Badge key={h} variant="outline" className="bg-blue-50 border-blue-200 text-blue-700">{h}</Badge>
                   ))}
                   {templateFile.headers.length > 10 && (
-                    <Badge variant="outline" className="bg-purple-50 border-purple-200 text-purple-700">+{templateFile.headers.length - 10} more</Badge>
+                    <Badge variant="outline" className="bg-blue-50 border-blue-200 text-blue-700">+{templateFile.headers.length - 10} more</Badge>
                   )}
                 </div>
               </div>
             ) : (
-              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-purple-300 rounded-xl cursor-pointer bg-gradient-to-br from-purple-50 to-blue-50 hover:from-purple-100 hover:to-blue-100 transition-all duration-300 group">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-blue-300 rounded-xl cursor-pointer bg-gradient-to-br from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 transition-all duration-300 group">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                   <Upload className="w-8 h-8 text-white" />
                 </div>
-                <span className="text-sm font-medium text-purple-700 group-hover:text-purple-900">Click to upload template</span>
+                <span className="text-sm font-medium text-blue-700 group-hover:text-blue-900">Click to upload template</span>
                 <span className="text-xs text-muted-foreground mt-1">CSV file</span>
                 <input
                   type="file"
@@ -320,7 +320,7 @@ export default function BuilderPage() {
 
         {/* Input Files Upload Card */}
         <Card className="card-hover border-2 shadow-lg hover:shadow-xl transition-all duration-300">
-          <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-t-lg">
+          <CardHeader className="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-t-lg">
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
                 <Layers className="w-5 h-5 text-white" />
@@ -332,8 +332,8 @@ export default function BuilderPage() {
             </div>
           </CardHeader>
           <CardContent className="pt-6">
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-blue-300 rounded-xl cursor-pointer bg-gradient-to-br from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-all duration-300 mb-4 group">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-blue-300 rounded-xl cursor-pointer bg-gradient-to-br from-cyan-50 to-blue-50 hover:from-cyan-100 hover:to-blue-100 transition-all duration-300 mb-4 group">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <Upload className="w-8 h-8 text-white" />
               </div>
               <span className="text-sm font-medium text-blue-700 group-hover:text-blue-900">Click to upload files</span>
@@ -388,7 +388,7 @@ export default function BuilderPage() {
               <CardTitle className="text-xl font-bold text-purple-900">
                 Quick Prompt
               </CardTitle>
-              <CardDescription className="text-purple-800 font-medium mt-1">
+              <CardDescription className="text-black/80 font-medium mt-1">
                 🚀 Describe what you want in simple terms (alternative to detailed instructions below)
               </CardDescription>
             </div>
@@ -409,7 +409,7 @@ export default function BuilderPage() {
                   quickPrompt: e.target.value,
                 }));
               }}
-              className="min-h-[100px] resize-y bg-white border-2 border-purple-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-400 text-base leading-relaxed placeholder:text-purple-400"
+              className="min-h-[100px] resize-y bg-white border-2 border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-400 text-base leading-relaxed placeholder:text-blue-400"
             />
             {config.quickPrompt && config.quickPrompt.trim() && (
               <div className="bg-purple-100 border border-purple-300 rounded-lg p-3">
@@ -488,7 +488,7 @@ export default function BuilderPage() {
 
       {/* Configuration Tabs */}
       {templateFile && inputFiles.length > 0 && (
-        <Card className="card-hover border-2 shadow-lg border-purple-200">
+        <Card className="card-hover border-2 shadow-lg border-blue-200">
           <CardHeader className="bg-gradient-to-r from-purple-100 via-pink-100 via-blue-100 to-purple-100 rounded-t-lg">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg">
@@ -598,7 +598,7 @@ export default function BuilderPage() {
                         ],
                       }));
                     }}
-                    className="border-purple-300 text-purple-700 hover:bg-purple-50 hover:border-purple-400"
+                    className="border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400"
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Add Mapping
