@@ -10,6 +10,7 @@ A production-quality Next.js 14 application for combining multiple CSV files int
 
 - **Template-based Schema**: Define output structure using a template CSV file
 - **Multi-file Upload**: Combine unlimited CSV files
+- **Intelligent Instructions**: Natural language parsing that automatically configures your report
 - **Auto Column Mapping**: Intelligent header matching using similarity algorithms
 - **Data Transforms**: Trim, case conversion, date/number parsing, string replacement
 - **Filters**: Filter rows using various operators (equals, contains, greater than, etc.)
@@ -17,6 +18,11 @@ A production-quality Next.js 14 application for combining multiple CSV files int
 - **Derived Fields**: Create new fields using concat, fallback, and math operations
 - **Preview Table**: View first 200 rows with pagination
 - **Export**: Download merged CSV file
+- **Privacy-First**: 100% client-side processing - your data never leaves your device
+
+## 📖 User Guide
+
+For detailed instructions on how to use the tool, see **[USER_GUIDE.md](./USER_GUIDE.md)** - A comprehensive guide with examples, tips, and troubleshooting.
 
 ## Tech Stack
 
