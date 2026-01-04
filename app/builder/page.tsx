@@ -161,20 +161,21 @@ export default function BuilderPage() {
         </div>
 
       {/* How to Use Guide */}
-      <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 shadow-lg mb-6">
-        <CardHeader className="bg-gradient-to-r from-blue-100 via-cyan-100 to-blue-100 rounded-t-lg border-b-2 border-blue-300">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-              <HelpCircle className="w-5 h-5 text-white" />
+      <section aria-labelledby="how-to-use-heading">
+        <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 shadow-lg mb-6">
+          <CardHeader className="bg-gradient-to-r from-blue-100 via-cyan-100 to-blue-100 rounded-t-lg border-b-2 border-blue-300">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg" aria-hidden="true">
+                <HelpCircle className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1">
+                <CardTitle id="how-to-use-heading" className="text-xl font-bold text-blue-900">How to Use This Tool</CardTitle>
+                <CardDescription className="text-blue-800 mt-1">
+                  Follow these steps to combine your CSV files and create a unified report
+                </CardDescription>
+              </div>
             </div>
-            <div className="flex-1">
-              <CardTitle className="text-xl font-bold text-blue-900">How to Use This Tool</CardTitle>
-              <CardDescription className="text-blue-800 mt-1">
-                Follow these steps to combine your CSV files and create a unified report
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
+          </CardHeader>
         <CardContent className="pt-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
@@ -241,8 +242,11 @@ export default function BuilderPage() {
           </div>
         </CardContent>
       </Card>
+      </section>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <section aria-labelledby="file-upload-heading">
+        <h2 id="file-upload-heading" className="sr-only">File Upload Section</h2>
+        <div className="grid gap-6 md:grid-cols-2">
         {/* Template Upload Card */}
         <Card className="card-hover border-2 shadow-lg hover:shadow-xl transition-all duration-300">
           <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-t-lg">
@@ -274,8 +278,9 @@ export default function BuilderPage() {
                     size="icon"
                     onClick={() => setTemplateFile(null)}
                     className="hover:bg-red-100 hover:text-red-600"
+                    aria-label={`Remove template file ${templateFile.filename}`}
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </div>
                 {templateFile.error && (
@@ -305,6 +310,8 @@ export default function BuilderPage() {
                     const file = e.target.files?.[0];
                     if (file) handleTemplateUpload(file);
                   }}
+                  aria-label="Upload template CSV file that defines the output structure"
+                  id="template-file-input"
                 />
               </label>
             )}
@@ -337,6 +344,8 @@ export default function BuilderPage() {
                 accept=".csv"
                 multiple
                 onChange={(e) => handleInputFilesUpload(e.target.files)}
+                aria-label="Upload one or more input CSV files to combine"
+                id="input-files-input"
               />
             </label>
             <div className="space-y-2 max-h-64 overflow-y-auto">
@@ -356,15 +365,17 @@ export default function BuilderPage() {
                     size="icon"
                     onClick={() => setInputFiles((prev) => prev.filter((_, i) => i !== idx))}
                     className="hover:bg-red-100 hover:text-red-600"
+                    aria-label={`Remove input file ${file.filename}`}
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
-      </div>
+        </div>
+      </section>
 
       {/* Quick Prompt Card - Simple Text Option */}
       <Card className="card-hover border-2 shadow-xl border-purple-300 bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 mb-6">
@@ -454,7 +465,12 @@ export default function BuilderPage() {
                 }));
               }}
               className="min-h-[180px] resize-y bg-white border-2 border-amber-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-400 text-base leading-relaxed placeholder:text-amber-400"
+              aria-label="Detailed instructions field - provide comprehensive requirements for report configuration"
+              aria-describedby="instructions-description"
             />
+            <div id="instructions-description" className="sr-only">
+              Enter detailed instructions about how you want the report configured. Your instructions will be automatically parsed and applied to configure column mappings, transformations, filters, and other settings.
+            </div>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm text-blue-900 font-medium mb-2">
                 💡 How Instructions Work:
@@ -567,7 +583,7 @@ export default function BuilderPage() {
                           }));
                         }}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </div>
                   ))}
@@ -672,7 +688,7 @@ export default function BuilderPage() {
                           }));
                         }}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </div>
                   ))}
@@ -689,7 +705,7 @@ export default function BuilderPage() {
                     }}
                     className="border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400"
                   >
-                    <Plus className="mr-2 h-4 w-4" />
+                    <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
                     Add Transform
                   </Button>
                 </div>
@@ -761,7 +777,7 @@ export default function BuilderPage() {
                           }));
                         }}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </div>
                   ))}
@@ -778,7 +794,7 @@ export default function BuilderPage() {
                     }}
                     className="border-pink-300 text-pink-700 hover:bg-pink-50 hover:border-pink-400"
                   >
-                    <Plus className="mr-2 h-4 w-4" />
+                    <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
                     Add Filter
                   </Button>
                 </div>
@@ -911,7 +927,7 @@ export default function BuilderPage() {
                             }));
                           }}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-4 w-4" aria-hidden="true" />
                         </Button>
                       </div>
                       <div>
@@ -977,7 +993,7 @@ export default function BuilderPage() {
                     }}
                     className="border-indigo-300 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-400"
                   >
-                    <Plus className="mr-2 h-4 w-4" />
+                    <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
                     Add Derived Field
                   </Button>
                 </div>
@@ -1063,8 +1079,9 @@ export default function BuilderPage() {
               <Button 
                 onClick={handleDownload}
                 className="bg-gradient-to-r from-green-600 via-emerald-500 to-teal-600 hover:from-green-700 hover:via-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                aria-label={`Download merged CSV report with ${processedData.length} rows`}
               >
-                <Download className="mr-2 h-4 w-4" />
+                <Download className="mr-2 h-4 w-4" aria-hidden="true" />
                 Download CSV
               </Button>
             </div>

@@ -17,7 +17,7 @@ export default function Home() {
       <div className="absolute top-1/2 right-1/4 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style={{ animationDelay: '1s' }}></div>
       <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-green-400 rounded-full mix-blend-multiply filter blur-xl opacity-35 animate-float" style={{ animationDelay: '3s' }}></div>
 
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center p-8 md:p-24">
+      <main id="main-content" className="relative z-10 flex min-h-screen flex-col items-center justify-center p-8 md:p-24">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           {/* Main heading with gradient */}
           <div className="space-y-4">
@@ -151,9 +151,10 @@ export default function Home() {
               <Button 
                 size="lg" 
                 className="bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 hover:from-purple-700 hover:via-pink-600 hover:to-blue-700 text-white text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group animate-pulse-slow"
+                aria-label="Go to CSV Report Builder page"
               >
                 Get Started
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </Button>
             </Link>
           </div>
@@ -161,24 +162,24 @@ export default function Home() {
           {/* Feature highlights */}
           <div className="flex flex-wrap justify-center gap-6 mt-12 text-white/80">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-300" />
+              <CheckCircle2 className="w-5 h-5 text-green-300" aria-hidden="true" />
               <span>Auto column mapping</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-300" />
+              <CheckCircle2 className="w-5 h-5 text-green-300" aria-hidden="true" />
               <span>Data transforms</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-300" />
+              <CheckCircle2 className="w-5 h-5 text-green-300" aria-hidden="true" />
               <span>Deduplication</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-300" />
+              <CheckCircle2 className="w-5 h-5 text-green-300" aria-hidden="true" />
               <span>Live preview</span>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
